@@ -17,7 +17,7 @@ LOGO_URL = "https://cdn.discordapp.com/attachments/1417642877282160742/141797142
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# ---------- LIMPAR CORES FIVEM ----------
+# ---------- LIMPAR CORES DO FIVEM ----------
 def clean_fivem_name(name):
     return re.sub(r"\^\d", "", name)
 
@@ -69,14 +69,14 @@ def create_embed(data):
         embed = discord.Embed(
             title="Nova Fenix RP",
             description="🔴 Servidor Offline",
-            color=0xff0000
+            color=0xff0000  # 🔴 Barra vermelha
         )
     else:
         server_name = clean_fivem_name(data["servername"])
         embed = discord.Embed(
             title=server_name,
             description="🟢 Servidor Online",
-            color=0xff0000  # 🔴 Barra lateral vermelha
+            color=0xff0000  # 🔴 Barra vermelha
         )
 
         embed.add_field(
@@ -92,11 +92,11 @@ def create_embed(data):
         )
 
         embed.set_thumbnail(url=LOGO_URL)
-        embed.set_footer(text="Atualização automática a cada 60 segundos")
+        embed.set_footer(text="Atualiza automaticamente a cada 60 segundos")
 
     return embed
 
-# ---------- VARIÁVEL GLOBAL PARA GUARDAR MENSAGEM ----------
+# ---------- VARIÁVEL GLOBAL ----------
 status_message = None
 
 # ---------- LOOP DE ATUALIZAÇÃO ----------
@@ -104,14 +104,30 @@ status_message = None
 async def update_status():
     global status_message
 
-    channel = await bot.fetch_channel(CHANNEL_ID)
-    data = await get_fivem_info()
-    embed = create_embed(data)
+    try:
+        channel = await bot.fetch_channel(CHANNEL_ID)
+        data = await get_fivem_info()
+        embed = create_embed(data)
 
-    if status_message is None:
-        status_message = await channel.send(embed=embed, view=ServerButtons())
-    else:
-        await status_message.edit(embed=embed, view=ServerButtons())
+        if status_message is None:
+            status_message = await channel.send(
+                embed=embed,
+                view=ServerButtons()
+            )
+        else:
+            await status_message.edit(
+                embed=embed,
+                view=ServerButtons()
+            )
+
+        print("Mensagem atualizada com sucesso")
+
+    except Exception as e:
+        print("ERRO:", e)
+
+@update_status.before_loop
+async def before_update():
+    await bot.wait_until_ready()
 
 # ---------- READY ----------
 @bot.event
