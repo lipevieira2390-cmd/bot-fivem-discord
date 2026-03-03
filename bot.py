@@ -102,4 +102,10 @@ async def update_status():
     # Envia a primeira mensagem
     data = await get_fivem_info()
     message = await channel.send(embed=create_embed(data))
+    # ---------- EVENTO READY ----------
+@bot.event
+async def on_ready():
+    print(f"Bot ligado como {bot.user}")
+    await update_status()
+
 bot.run(TOKEN)
