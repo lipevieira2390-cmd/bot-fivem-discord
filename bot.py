@@ -91,37 +91,43 @@ def create_embed(data):
         embed.set_image(url=LOGO_URL)      # Imagem grande embaixo
 
     return embed
+from discord.ui import View, Button
+
 class ServerButtons(View):
     def __init__(self):
         super().__init__(timeout=None)
 
+        # 🔶 Botão Conectar
         self.add_item(Button(
-    label="Conectar",
-    emoji="<:fivemlogo:1287509960003162163>",
-    url="fivem://connect/novafenixrp.com:30120"
-))
+            label="Conectar",
+            emoji="<:fivemlogo:1287509960003162163>",
+            url="fivem://connect/novafenixrp.com:30120"
+        ))
 
+        # 💎 Botão Loja
         self.add_item(Button(
-    label="Conectar",
-    emoji="<:fivemlogo:1287509960003162163>",
-    url="fivem://connect/novafenixrp.com:30120"
-))
+            label="Loja",
+            emoji="💎",
+            url=" https://loja.novafenixrp.com/"
+        ))
 
 # ---------- LOOP DE ATUALIZAÇÃO ----------
 async def update_status():
     await bot.wait_until_ready()
     channel = bot.get_channel(CHANNEL_ID)
+
     if channel is None:
         print("Canal não encontrado!")
         return
 
-    # Envia a primeira mensagem
     data = await get_fivem_info()
-    message = await channel.send(
-    embed=create_embed(data),
-    view=ServerButtons()
-)
-    # ---------- EVENTO READY ----------
+
+    await channel.send(
+        embed=create_embed(data),
+        view=ServerButtons()
+    )
+
+# ---------- EVENTO READY ----------
 @bot.event
 async def on_ready():
     print(f"Bot ligado como {bot.user}")
