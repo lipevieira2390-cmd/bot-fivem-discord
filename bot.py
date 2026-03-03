@@ -25,6 +25,8 @@ def clean_fivem_name(name):
 async def get_fivem_info():
     try:
         async with aiohttp.ClientSession() as session:
+
+            # Players (tempo real)
             async with session.get(
                 "http://84.201.4.200:30120/players.json",
                 timeout=10
@@ -33,6 +35,7 @@ async def get_fivem_info():
                 players = await resp.json()
                 player_count = len(players)
 
+            # Info do servidor
             async with session.get(
                 "http://84.201.4.200:30120/info.json",
                 timeout=10
