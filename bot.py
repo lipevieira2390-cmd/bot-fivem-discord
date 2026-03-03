@@ -102,10 +102,10 @@ class ServerButtons(View):
 ))
 
         self.add_item(Button(
-            label="Loja",
-            emoji="💎",
-            url="https://loja.novafenixrp.com/"
-        ))
+    label="Conectar",
+    emoji="<:fivemlogo:1287509960003162163>",
+    url="fivem://connect/novafenixrp.com:30120"
+))
 
 # ---------- LOOP DE ATUALIZAÇÃO ----------
 async def update_status():
