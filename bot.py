@@ -101,5 +101,5 @@ async def update_status():
 
     # Envia a primeira mensagem
     data = await get_fivem_info()
-  bot.run(TOKEN)
     message = await channel.send(embed=create_embed(data))
+bot.run(TOKEN)
