@@ -96,13 +96,15 @@ class ServerButtons(View):
         super().__init__(timeout=None)
 
         self.add_item(Button(
-            label="🎮 Entrar no Servidor",
-            url="https://cfx.re/join/SEUCODIGO"
+            label="Conectar",
+            emoji="<:fivemlogo:1287509960003162163>",
+            url="https://cfx.re/join/novafenixrp.com"
         ))
 
         self.add_item(Button(
-            label="🛒 Loja",
-            url="https://sualoja.com"
+            label="Loja",
+            emoji="💎",
+            url="https://loja.novafenixrp.com/"
         ))
 
 # ---------- LOOP DE ATUALIZAÇÃO ----------
