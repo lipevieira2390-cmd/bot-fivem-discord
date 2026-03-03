@@ -91,18 +91,18 @@ def create_embed(data):
         embed.set_image(url=LOGO_URL)      # Imagem grande embaixo
 
     return embed
-    class ServerButtons(View):
+class ServerButtons(View):
     def __init__(self):
         super().__init__(timeout=None)
 
         self.add_item(Button(
             label="🎮 Entrar no Servidor",
-            url="https://cfx.re/join/novafenixrp.com"
+            url="https://cfx.re/join/SEUCODIGO"
         ))
 
         self.add_item(Button(
             label="🛒 Loja",
-            url="https://loja.novafenixrp.com/"
+            url="https://sualoja.com"
         ))
 
 # ---------- LOOP DE ATUALIZAÇÃO ----------
