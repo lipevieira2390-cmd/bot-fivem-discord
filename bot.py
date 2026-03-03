@@ -64,32 +64,36 @@ class ServerButtons(View):
 def create_embed(data):
     if not data["online"]:
         embed = discord.Embed(
-            title="Nova Fenix RP",
-            description="🔴 Servidor Offline",
-            color=0xff0000  # 🔴 Barra vermelha
+            title="Nova Fénix RP",
+            description="🔴 **Servidor Offline**",
+            color=0xff0000
         )
-    else:
-        server_name = clean_fivem_name(data["servername"])
-        embed = discord.Embed(
-            title=server_name,
-            description="🟢 Servidor Online",
-            color=0xff0000  # 🔴 Barra vermelha
-        )
+        return embed
 
-        embed.add_field(
-            name="👥 Players Online",
-            value=f"{data['players']}/{data['max_players']}",
-            inline=False
-        )
+    embed = discord.Embed(
+        title="Nova Fénix RP",
+        description="🟢 **Servidor Online**",
+        color=0xff0000  # Barra lateral vermelha
+    )
 
-        embed.add_field(
-            name="🌐 IP",
-            value=f"{SERVER_IP}",
-            inline=False
-        )
+    embed.add_field(
+        name="👥 Players Online",
+        value=f"{data['players']}/{data['max_players']}",
+        inline=False
+    )
 
-        embed.set_thumbnail(url=LOGO_URL)
-        embed.set_footer(text="Atualiza automaticamente a cada 60 segundos")
+    embed.add_field(
+        name="🌐 IP",
+        value="novafenixrp.com",
+        inline=False
+    )
+
+    embed.set_thumbnail(url=LOGO_URL)
+    embed.set_image(url=LOGO_URL)
+
+    embed.set_footer(
+        text="Atualiza automaticamente a cada 60 segundos"
+    )
 
     return embed
 
