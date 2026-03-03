@@ -30,13 +30,13 @@ async def get_fivem_info():
             ) as resp:
 
                 data = await resp.json()
-                print(data)  # 👈 ISTO VAI MOSTRAR NOS LOGS
-
                 server = data["Data"]
+
+                players = server.get("selfReportedClients", 0)
 
                 return {
                     "online": True,
-                    "players": server["clients"],
+                    "players": players,
                     "max_players": server["svMaxclients"],
                     "servername": clean_fivem_name(server["hostname"])
                 }
