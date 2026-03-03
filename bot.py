@@ -108,24 +108,28 @@ class ServerButtons(View):
         self.add_item(Button(
             label="Loja",
             emoji="💎",
-            url=" https://loja.novafenixrp.com/"
+            url="https://loja.novafenixrp.com/"
         ))
 
 # ---------- LOOP DE ATUALIZAÇÃO ----------
-async def update_status():
-    await bot.wait_until_ready()
-    channel = bot.get_channel(CHANNEL_ID)
+@bot.event
+async def on_ready():
+    print(f"Bot ligado como {bot.user}")
 
-    if channel is None:
-        print("Canal não encontrado!")
-        return
+    try:
+        channel = await bot.fetch_channel(CHANNEL_ID)
 
-    data = await get_fivem_info()
+        data = await get_fivem_info()
 
-    await channel.send(
-        embed=create_embed(data),
-        view=ServerButtons()
-    )
+        await channel.send(
+            embed=create_embed(data),
+            view=ServerButtons()
+        )
+
+        print("Mensagem enviada com sucesso!")
+
+    except Exception as e:
+        print("Erro ao enviar mensagem:", e)
 
 # ---------- EVENTO READY ----------
 @bot.event
