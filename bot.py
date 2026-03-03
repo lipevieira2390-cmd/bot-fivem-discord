@@ -96,10 +96,10 @@ class ServerButtons(View):
         super().__init__(timeout=None)
 
         self.add_item(Button(
-            label="Conectar",
-            emoji="<:fivemlogo:1287509960003162163>",
-            url="https://cfx.re/join/novafenixrp.com"
-        ))
+    label="Conectar",
+    emoji="<:fivemlogo:1287509960003162163>",
+    url="fivem://connect/novafenixrp.com:30120"
+))
 
         self.add_item(Button(
             label="Loja",
