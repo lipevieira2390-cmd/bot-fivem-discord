@@ -2,16 +2,16 @@ import discord
 from discord.ext import commands, tasks
 from discord.ui import View, Button
 import aiohttp
-import json
 import re
 import os
 
 # ---------- CONFIGURAÇÃO ----------
 TOKEN = os.getenv("TOKEN")
-SERVER_IP = "novafenixrp.com"
-SERVER_PORT = 30120
 CHANNEL_ID = 1448536032353190032
 LOGO_URL = "https://cdn.discordapp.com/attachments/1417642877282160742/1417971423162404994/raw.png"
+
+# Código do servidor FiveM
+FIVEM_CODE = "vrz95q"
 
 # ---------- INTENTS ----------
 intents = discord.Intents.default()
@@ -21,12 +21,12 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 def clean_fivem_name(name):
     return re.sub(r"\^\d", "", name)
 
-# ---------- OBTER INFO DO SERVIDOR ----------
+# ---------- OBTER INFO DO SERVIDOR (API OFICIAL) ----------
 async def get_fivem_info():
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                "https://servers-frontend.fivem.net/api/servers/single/vrz95q"
+                f"https://servers-frontend.fivem.net/api/servers/single/{FIVEM_CODE}"
             ) as resp:
 
                 data = await resp.json()
@@ -36,7 +36,7 @@ async def get_fivem_info():
                     "online": server["clients"] is not None,
                     "players": server["clients"],
                     "max_players": server["svMaxclients"],
-                    "servername": server["hostname"]
+                    "servername": clean_fivem_name(server["hostname"])
                 }
 
     except Exception as e:
@@ -51,7 +51,7 @@ class ServerButtons(View):
         self.add_item(Button(
             label="Conectar",
             emoji="<:fivemlogo:1287509960003162163>",
-            url="https://cfx.re/join/vrz95q"
+            url=f"https://cfx.re/join/{FIVEM_CODE}"
         ))
 
         self.add_item(Button(
@@ -71,20 +71,14 @@ def create_embed(data):
         return embed
 
     embed = discord.Embed(
-        title="Nova Fénix RP",
+        title=data["servername"],
         description="🟢 **Servidor Online**",
-        color=0xff0000  # Barra lateral vermelha
+        color=0xff0000  # Barra vermelha lateral
     )
 
     embed.add_field(
         name="👥 Players Online",
         value=f"{data['players']}/{data['max_players']}",
-        inline=False
-    )
-
-    embed.add_field(
-        name="🌐 IP",
-        value="novafenixrp.com",
         inline=False
     )
 
@@ -97,31 +91,24 @@ def create_embed(data):
 
     return embed
 
-# ---------- VARIÁVEL GLOBAL ----------
-status_message = None
-
 # ---------- LOOP DE ATUALIZAÇÃO ----------
 @tasks.loop(seconds=60)
 async def update_status():
-    global status_message
-
     try:
         channel = await bot.fetch_channel(CHANNEL_ID)
         data = await get_fivem_info()
         embed = create_embed(data)
 
-        if status_message is None:
-            status_message = await channel.send(
-                embed=embed,
-                view=ServerButtons()
-            )
-        else:
-            await status_message.edit(
-                embed=embed,
-                view=ServerButtons()
-            )
+        # Procurar mensagem já enviada pelo bot
+        async for message in channel.history(limit=10):
+            if message.author == bot.user:
+                await message.edit(embed=embed, view=ServerButtons())
+                print("Mensagem atualizada com sucesso")
+                return
 
-        print("Mensagem atualizada com sucesso")
+        # Se não existir, cria nova
+        await channel.send(embed=embed, view=ServerButtons())
+        print("Nova mensagem criada")
 
     except Exception as e:
         print("ERRO:", e)
