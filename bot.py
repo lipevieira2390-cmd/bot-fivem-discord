@@ -26,25 +26,34 @@ async def get_fivem_info():
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"https://servers-frontend.fivem.net/api/servers/single/{FIVEM_CODE}"
+                "http://84.201.4.200:30120/players.json",
+                timeout=10
             ) as resp:
 
-                data = await resp.json()
-                server = data["Data"]
+                players = await resp.json()
+                player_count = len(players)
 
-                players = server.get("selfReportedClients", 0)
+            async with session.get(
+                "http://84.201.4.200:30120/info.json",
+                timeout=10
+            ) as resp:
 
-                return {
-                    "online": True,
-                    "players": players,
-                    "max_players": server["svMaxclients"],
-                    "servername": clean_fivem_name(server["hostname"])
-                }
+                info = await resp.json()
+                max_players = info["vars"]["sv_maxClients"]
+                server_name = clean_fivem_name(
+                    info["vars"]["sv_projectName"]
+                )
+
+            return {
+                "online": True,
+                "players": player_count,
+                "max_players": max_players,
+                "servername": server_name
+            }
 
     except Exception as e:
-        print("Erro API FiveM:", e)
+        print("Erro direto no servidor:", e)
         return {"online": False}
-
 # ---------- BOTÕES ----------
 class ServerButtons(View):
     def __init__(self):
