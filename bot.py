@@ -55,13 +55,25 @@ class ServerButtons(View):
         self.add_item(Button(
             label="Conectar",
             emoji="<:fivemlogo:1287509960003162163>",
-            url=f"https://cfx.re/join/{FIVEM_CODE}"
+            url="https://cfx.re/join/vrz95q"
         ))
 
         self.add_item(Button(
             label="Loja",
             emoji="💎",
             url="https://loja.novafenixrp.com/"
+        ))
+
+        self.add_item(Button(
+            label="TikTok",
+            emoji="<:tiktokemoji:879716998983073792>",
+            url="https://www.tiktok.com/@nova_fenix_rp"
+        ))
+
+        self.add_item(Button(
+            label="Instagram",
+            emoji="<:instagramemoji:1089308557045932183>",
+            url="https://www.instagram.com/novafenix_rp/"
         ))
 
 # ---------- CRIAR EMBED ----------
@@ -75,14 +87,26 @@ def create_embed(data):
         return embed
 
     embed = discord.Embed(
-        title=data["servername"],
-        description="🟢 **Servidor Online**",
-        color=0xff0000  # Barra vermelha lateral
+        title="Nova Fénix RP",
+        description="Bem-vindo ao vosso servidor de RolePlay.\nEntra, diverte-te e respeita as regras do servidor.",
+        color=0x00ff00
     )
 
     embed.add_field(
-        name="👥 Players Online",
+        name="🟢 STATUS",
+        value="Online",
+        inline=False
+    )
+
+    embed.add_field(
+        name="👥 PLAYERS",
         value=f"{data['players']}/{data['max_players']}",
+        inline=False
+    )
+
+    embed.add_field(
+        name="🌐 IP",
+        value="```connect cfx.re/join/vrz95q```",
         inline=False
     )
 
@@ -90,7 +114,7 @@ def create_embed(data):
     embed.set_image(url=LOGO_URL)
 
     embed.set_footer(
-        text="Atualiza automaticamente a cada 60 segundos"
+        text="Atualiza automaticamente"
     )
 
     return embed
