@@ -4,6 +4,7 @@ import aiohttp
 import asyncio
 import json
 import re
+from discord.ui import View, Button
 
 # ---------- CONFIGURAÇÃO ----------
 import os
@@ -90,6 +91,19 @@ def create_embed(data):
         embed.set_image(url=LOGO_URL)      # Imagem grande embaixo
 
     return embed
+    class ServerButtons(View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+        self.add_item(Button(
+            label="🎮 Entrar no Servidor",
+            url="https://cfx.re/join/novafenixrp.com"
+        ))
+
+        self.add_item(Button(
+            label="🛒 Loja",
+            url="https://loja.novafenixrp.com/"
+        ))
 
 # ---------- LOOP DE ATUALIZAÇÃO ----------
 async def update_status():
@@ -101,7 +115,10 @@ async def update_status():
 
     # Envia a primeira mensagem
     data = await get_fivem_info()
-    message = await channel.send(embed=create_embed(data))
+    message = await channel.send(
+    embed=create_embed(data),
+    view=ServerButtons()
+)
     # ---------- EVENTO READY ----------
 @bot.event
 async def on_ready():
