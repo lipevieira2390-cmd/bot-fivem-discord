@@ -51,7 +51,7 @@ class ServerButtons(View):
         self.add_item(Button(
             label="Conectar",
             emoji="<:fivemlogo:1287509960003162163>",
-            url="https://servers.fivem.net/servers/detail/vrz95q"
+            url="https://cfx.re/join/vrz95q"
         ))
 
         self.add_item(Button(
